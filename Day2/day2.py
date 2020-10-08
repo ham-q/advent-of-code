@@ -7,9 +7,9 @@ def ReadFile(filename): #used to read in input data for program only
         input_list[i] = int(input_list[i])
     return input_list
 
-def Setup(program_list): #setting program to correct state before iterating through
-    program_list[1] = 12
-    program_list[2] = 2
+def Setup(program_list, noun, verb): #setting program to correct state before iterating through
+    program_list[1] = noun
+    program_list[2] = verb
     print(program_list) #debugging
     return program_list
 
@@ -36,6 +36,10 @@ def RunProgram(program_list):
         instruction = program_list[instr_marker]
     return program_list
 
-#this command will load file, set it up and then execute code, 
-#returning a list wherein I then pull 0th item to display
-print(RunProgram(Setup(ReadFile("Day2/input.txt")))[0])
+for noun in range(100):
+    for verb in range(100):
+        if RunProgram(Setup(ReadFile("Day2/input.txt"), noun, verb))[0] == 19690720:
+            print((100*noun) + verb)
+            quit()
+
+#may optimise at a later date
