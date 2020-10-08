@@ -1,8 +1,13 @@
 import math
 
 def Fuel_Calculation(module): #input is float
+    cost = 0
+    total_cost=0 #used to total needed fuel (for module and fuel)
     cost = math.floor((module/3))-2
-    return cost
+    while cost > 0:
+        total_cost += cost
+        cost = math.floor((cost/3))-2
+    return total_cost
 
 def Total_Fuel_Calculation(module_list):
     Fuel_Total = 0 #used to track total fuel cost
