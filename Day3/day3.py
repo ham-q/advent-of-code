@@ -41,27 +41,22 @@ def RecordMovements(directions):
     del path_list[0] #removes 0,0 since it won't be counted as intersection
     return path_list
 
-def find_matching_indices(a, b):
-    res = [] 
-    i = 0
-    while (i < len(a)): 
-        if (b.count(a[i]) > 0): 
-            res.append(i) 
-        i += 1
-        print(i, "/", len(a))
-    return res
-
 def CheckIntersection(wire1_dir_list, wire2_dir_list):
     """Used to check items in both lists and return where they intersect
     Input: 2xLIST (all STR elements) - list with all locations visited in form x,y for both wires
-    Outputs: SET (all STR elements) - set of intersections"""
-    wire_lengths = list(find_matching_indices(wire1_dir_list, wire2_dir_list))
-    return set(wire1_dir_list).intersection(wire2_dir_list), wire_lengths
+    Outputs: SET (all STR elements) - set of intersections
+    LIST - list of steps needed from both wires to reach intersection point"""
+    wire_lengths = []
+    intersection_set = set(wire1_dir_list).intersection(wire2_dir_list)
+    for item in intersection_set:
+        wire_lengths.append(wire1_dir_list.index(item)+wire2_dir_list.index(item)+2) #2 is added to account for removal of inital steps for both
+    return intersection_set, wire_lengths
 
 def GetIntersectionLengths(intersection_list, lengths):
     """Used to find minimum distance in Manhattan Distance, 
-    Input: Set (all STR elements) - set of intersections
-    Outputs: INT - the minimum distance of an intersection from centre"""
+    Input: SET (all STR elements) - set of intersections
+    LIST - list of steps needed from both wires to reach intersection point
+    Outputs: TUPLE - the minimum distance of an intersection from centre + minimum number of steps to intersection"""
     length_list = []
     for position in intersection_list:
         temp_list = position.split(",")
