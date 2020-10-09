@@ -41,13 +41,24 @@ def RecordMovements(directions):
     del path_list[0] #removes 0,0 since it won't be counted as intersection
     return path_list
 
+def find_matching_indices(a, b):
+    res = [] 
+    i = 0
+    while (i < len(a)): 
+        if (b.count(a[i]) > 0): 
+            res.append(i) 
+        i += 1
+        print(i, "/", len(a))
+    return res
+
 def CheckIntersection(wire1_dir_list, wire2_dir_list):
     """Used to check items in both lists and return where they intersect
     Input: 2xLIST (all STR elements) - list with all locations visited in form x,y for both wires
     Outputs: SET (all STR elements) - set of intersections"""
-    return set(wire1_dir_list).intersection(wire2_dir_list)
+    wire_lengths = list(find_matching_indices(wire1_dir_list, wire2_dir_list))
+    return set(wire1_dir_list).intersection(wire2_dir_list), wire_lengths
 
-def GetIntersectionLengths(intersection_list):
+def GetIntersectionLengths(intersection_list, lengths):
     """Used to find minimum distance in Manhattan Distance, 
     Input: Set (all STR elements) - set of intersections
     Outputs: INT - the minimum distance of an intersection from centre"""
@@ -56,13 +67,14 @@ def GetIntersectionLengths(intersection_list):
         temp_list = position.split(",")
         temp_list = map(abs,map(int, temp_list))
         length_list.append(sum(temp_list))
-    return min(length_list)
+    return_string = str(min(length_list)), str(min(lengths))
+    return return_string
 
 def Main():
     wire1_directions, wire2_directions = ReadFile("Day3/input.txt")
     wire1_dir_list, wire2_dir_list = RecordMovements(wire1_directions), RecordMovements(wire2_directions)
-    intersections = CheckIntersection(wire1_dir_list, wire2_dir_list)
-    print(GetIntersectionLengths(intersections))
+    intersections, wirelength = CheckIntersection(wire1_dir_list, wire2_dir_list)
+    print(GetIntersectionLengths(intersections, wirelength))
 
 
 if __name__ == "__main__":
