@@ -17,19 +17,21 @@ def debug_display(program_list, instr_marker, instruction, formatted_instr):
     elif instruction == "4":
         print("OUTPUT")
 
-def FormatInstruction(opcode, program_list, instr_marker):
+def FormatInstruction(opcode, program_list, instr_marker, instruction):
     formatted_instr = []
-    for i in range(1,3):
-        try:
-            if opcode[-i] == "1":
-                formatted_instr.append(program_list[instr_marker+i])
-            elif opcode[-i] == "0":
+    i = 0
+    if instruction in ["02","01"]:
+        for i in range(1,3):
+            try:
+                if opcode[-i] == "1":
+                    formatted_instr.append(program_list[instr_marker+i])
+                elif opcode[-i] == "0":
+                    formatted_instr.append(program_list[program_list[instr_marker+i]])
+            except:
                 formatted_instr.append(program_list[program_list[instr_marker+i]])
-        except:
-            formatted_instr.append(program_list[program_list[instr_marker+i]])
-        print(i)
+            print(i)
+    i+=1
     formatted_instr.append(program_list[instr_marker+i])
-    print(formatted_instr)
     return formatted_instr
 
 def ExecuteInstruction(program_list, instr_marker, instruction):
@@ -38,10 +40,15 @@ def ExecuteInstruction(program_list, instr_marker, instruction):
         formatted_instr = FormatInstruction(
             str(program_list[instr_marker])[0:len(str(program_list[instr_marker]))-2],
             program_list,
-            instr_marker)
+            instr_marker, 
+            instruction)
     elif not (instruction in ["3","4","03","04"]):
         formatted_instr = [program_list[program_list[instr_marker+1]], program_list[program_list[instr_marker+2]], program_list[instr_marker+3]]
     else:
+        print("3 or 4")
+    try:
+        print(formatted_instr)
+    except:
         print("3 or 4")
     if instruction in ["1","01"]:
         program_list[formatted_instr[2]] = formatted_instr[0] + formatted_instr[1]
