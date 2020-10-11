@@ -137,7 +137,7 @@ def ExecuteInstruction(program_list, instr_marker, instruction):
     else:
         print("oops")
         instr_marker += 2
-    ProgramStepper(program_list)
+    #ProgramStepper(program_list)
     return program_list, instr_marker
 
 def RunProgram(program_list):
