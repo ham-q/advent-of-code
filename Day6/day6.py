@@ -4,7 +4,7 @@ class Planet:
         self.orbit = None
         self.neighbour = []
 
-    def __str__(self):
+    def __repr__(self):
         return self.name 
 
     def AddOrbiting(self, orbit):
@@ -12,6 +12,9 @@ class Planet:
 
     def AddNeighbour(self, neighbour):
         self.neighbour.append(neighbour)
+
+    def AddParent(self,parent):
+        self.parent = parent
 
     def GetNeighbours(self):
         return self.neighbour
@@ -21,6 +24,9 @@ class Planet:
     
     def GetName(self):
         return self.name
+    
+    def GetParent(self):
+        return self.parent
 
 def ReadFile(filename):
     planet_data = []
@@ -28,7 +34,6 @@ def ReadFile(filename):
         for line in input_data:
             line2 = line.rstrip("\n")
             planet_data.append(line2.split(")"))
-    print(planet_data)
     return planet_data
 
 def InitialisePlanets(planet_data,count):
@@ -63,6 +68,33 @@ def CheckIndirect(planet_list, count):
                 count += 1
     return count
 
+def BreadthFirstSearch(planet_list):
+    for planet in planet_list:
+        if planet.GetName() == "YOU":
+            planet_main = planet
+    found = False
+    stack = [planet_main]
+    visited = []
+    while not found:
+        current_planet  = stack.pop()
+        nearby_planets = current_planet.GetNeighbours()
+        nearby_planets.append(current_planet.GetOrbiting())
+        if current_planet.GetName() == "SAN":
+            found = True
+        for neighbour in nearby_planets:
+            if not ((neighbour in visited) or (neighbour == None)):
+                neighbour.AddParent(current_planet)
+                stack.append(neighbour)
+        visited.append(current_planet)
+    for planet in planet_list:
+        if planet.GetName() == "SAN":
+            planet_main = planet
+    path = -2
+    while planet_main.GetName() != "YOU":
+        planet_main = planet_main.GetParent()
+        path += 1
+    return path
+
 def CheckOrbiting(planet_list):
     for planet in planet_list:
         print([str(planet), planet.GetOrbiting(), planet.GetNeighbours()])
@@ -70,7 +102,7 @@ def CheckOrbiting(planet_list):
 def Main():
     count = 0
     planet_list, count = InitialisePlanets(ReadFile("Day6/main_input.txt"), count)
-    print(CheckIndirect(planet_list, count))
+    print(BreadthFirstSearch(planet_list))
 
 if __name__ == "__main__":
     Main()
