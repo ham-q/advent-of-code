@@ -109,7 +109,7 @@ def BreadthFirstSearch(planet_list):
     while planet_main.GetName() != "YOU":
         planet_main = planet_main.GetParent()
         path += 1
-    return path
+    return path 
 
 def CheckOrbiting(planet_list):
     """Debug command, used to check the surrounding planets to all planets in system
