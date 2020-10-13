@@ -10,6 +10,11 @@ def ReadFile(filename):
         input_list[i] = int(input_list[i])
     return input_list
 
+def Setup(program_list, noun, verb):
+    program_list[1] = noun
+    program_list[2] = verb
+    return program_list
+
 def debug_display(instruction):
     """Used to show what instruction is being executed 
     (and to show when an incorrect instruction is executed)
@@ -61,7 +66,7 @@ def FormatInstruction(opcode, program_list, instr_marker, instruction):
             except:
                 formatted_instr.append(program_list[program_list[instr_marker+i]])
     if instruction in ["05","06"]:
-        for i in range(1,2):
+        for i in range(1,3):
             try:
                 if opcode[-i] == "1":
                     formatted_instr.append(program_list[instr_marker+i])
@@ -69,8 +74,14 @@ def FormatInstruction(opcode, program_list, instr_marker, instruction):
                     formatted_instr.append(program_list[program_list[instr_marker+i]])
             except:
                 formatted_instr.append(program_list[program_list[instr_marker+i]])
+    if instruction in ["04"]:
+        if opcode[-1] == "1":
+            formatted_instr.append(program_list[instr_marker+1])
+        elif opcode[-1] == "0":
+            formatted_instr.append(program_list[program_list[instr_marker+1]])
     i+=1
-    formatted_instr.append(program_list[instr_marker+i])
+    if not instruction in ["04","05","06"]:
+        formatted_instr.append(program_list[instr_marker+i])
     return formatted_instr
 
 def ExecuteInstruction(program_list, instr_marker, instruction):
@@ -93,7 +104,7 @@ def ExecuteInstruction(program_list, instr_marker, instruction):
     elif not (instruction in ["3","4","5","6"]):
         formatted_instr = [program_list[program_list[instr_marker+1]], program_list[program_list[instr_marker+2]], program_list[instr_marker+3]]
     elif instruction in  ["5","6"]:
-        formatted_instr = [program_list[program_list[instr_marker+1]], program_list[instr_marker+2]]
+        formatted_instr = [program_list[program_list[instr_marker+1]], program_list[program_list[instr_marker+2]]]
     else:
         formatted_instr = [program_list[program_list[instr_marker+1]]]
     if instruction in ["1","01"]:
@@ -106,17 +117,16 @@ def ExecuteInstruction(program_list, instr_marker, instruction):
         program_list[program_list[instr_marker+1]] = int(input("enter input: "))
         instr_marker += 2
     elif instruction in ["4","04"]:
+        print(program_list[instr_marker],program_list[instr_marker+1])
         print(formatted_instr[0])
         instr_marker += 2
     elif instruction in ["5","05"]:
-        print(program_list[instr_marker],program_list[instr_marker+1],program_list[instr_marker+2])
         print(formatted_instr)
         if formatted_instr[0] != 0:
             instr_marker = formatted_instr[1]
         else:
             instr_marker += 3
     elif instruction in ["6","06"]:
-        print(program_list[instr_marker],program_list[instr_marker+1],program_list[instr_marker+2])
         print(formatted_instr)
         if formatted_instr[0] == 0:
             instr_marker = formatted_instr[1]
@@ -135,7 +145,6 @@ def ExecuteInstruction(program_list, instr_marker, instruction):
             program_list[formatted_instr[2]] = 0
         instr_marker += 4
     else:
-        print("oops")
         instr_marker += 2
     #ProgramStepper(program_list)
     return program_list, instr_marker
@@ -148,9 +157,10 @@ def RunProgram(program_list):
     while instruction != "99":
         program_list, instr_marker = ExecuteInstruction(program_list, instr_marker, instruction)
         instruction = str(program_list[instr_marker])[-2:]
+    return program_list
 
 def Main():
-    RunProgram(ReadFile("Day5/input.txt"))
+    RunProgram(ReadFile("Day5/main_input.txt"))
 
 if __name__ == "__main__":
     Main()
