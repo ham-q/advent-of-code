@@ -63,7 +63,7 @@ def FormatInstruction(opcode, program_list, instr_marker, instruction):
                     formatted_instr.append(program_list[instr_marker+i])
                 elif opcode[-i] == "0":
                     formatted_instr.append(program_list[program_list[instr_marker+i]])
-            except:
+            except IndexError:
                 formatted_instr.append(program_list[program_list[instr_marker+i]])
     if instruction in ["05","06"]:
         for i in range(1,3):
@@ -72,7 +72,7 @@ def FormatInstruction(opcode, program_list, instr_marker, instruction):
                     formatted_instr.append(program_list[instr_marker+i])
                 elif opcode[-i] == "0":
                     formatted_instr.append(program_list[program_list[instr_marker+i]])
-            except:
+            except IndexError:
                 formatted_instr.append(program_list[program_list[instr_marker+i]])
     if instruction in ["04"]:
         if opcode[-1] == "1":
