@@ -41,24 +41,20 @@ def ReadFile(filename):
     return planet_data
 
 def InitialisePlanets(planet_data):
-    """WARNING: very bad coding lol
-    (may come back to this, likely don't need to add custom names for most planets besides YOU and SAN now that I'm passed testing)
-    Used to create all the planet instances from input data and add their orbiters and neighbours
+    """Used to create all the planet instances from input data and add their orbiters and neighbours
     Inputs: planet_data(LIST w/ STR elements) - list of elements to use for creating each planet instance, alongside what they orbit
     Outputs: planet_list(LIST w/ OBJ elements) - a list of all planet objects in system"""
     planet_list = []
     planet_names = []
     for planet in planet_data:
         if not planet[0] in planet_names:
-            exec("a"+planet[0]+" = Planet('"+ planet[0] + "')")
-            exec("planet_list.append(a" + planet[0] + ")")
-            exec("planet_names.append(a" + planet[0] + ".GetName())")
+            planet_list.append(Planet(planet[0]))
+            planet_names.append(planet[0])
         if not planet[1] in planet_names:
-            exec("a"+planet[1]+" = Planet('"+ planet[1] + "')")
-            exec("planet_list.append(a" + planet[1] + ")")
-            exec("planet_names.append(a" + planet[1] + ".GetName())")
-        exec("planet_list[planet_list.index(a" + planet[0] + ")]" + ".AddNeighbour(" + "planet_list[planet_list.index(a" + planet[1] + ")])")
-        exec("planet_list[planet_list.index(a" + planet[1] + ")]" + ".AddOrbiting(" + "planet_list[planet_list.index(a" + planet[0] + ")])")
+            planet_list.append(Planet(planet[1]))
+            planet_names.append(planet[1])
+        planet_list[planet_names.index(planet[0])].AddNeighbour(planet_list[planet_names.index(planet[1])])
+        planet_list[planet_names.index(planet[1])].AddOrbiting(planet_list[planet_names.index(planet[0])])
     return planet_list
 
 def CheckIndirect(planet_list):
@@ -69,8 +65,8 @@ def CheckIndirect(planet_list):
     for planet in planet_list:
         has_orbit = True
         current_planet = planet
-        while has_orbit == True:
-            if current_planet.GetOrbiting() == None:
+        while has_orbit is True:
+            if current_planet.GetOrbiting() is None:
                 has_orbit = False
                 print(current_planet)
                 print(current_planet.GetOrbiting())
@@ -98,7 +94,7 @@ def BreadthFirstSearch(planet_list):
         if current_planet.GetName() == "SAN":
             found = True
         for neighbour in nearby_planets:
-            if not ((neighbour in visited) or (neighbour == None)):
+            if not ((neighbour in visited) or (neighbour is None)):
                 neighbour.AddParent(current_planet)
                 stack.append(neighbour)
         visited.append(current_planet)
