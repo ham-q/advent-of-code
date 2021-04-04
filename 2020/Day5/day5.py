@@ -17,6 +17,12 @@ def CalculateMaxID(Tickets):
         #input()
     return MaxID
 
+def CalculateEmptySeat(Tickets):
+    ListOfIDs = list(range(8,1016))
+    for Ticket in Tickets:
+        ListOfIDs.remove(int(CalculateID(Ticket)))
+    return ListOfIDs
+
 def CalculateID(Ticket):
     MinNum = 0
     MaxNum = 127
@@ -37,7 +43,7 @@ def CalculateID(Ticket):
     return (MinNum*8) + MaxNum8
 
 def Main():
-    print("Highest is", CalculateMaxID(ReadFile("2020/Day5/main_input.txt")))
+    print("Empty seats are", CalculateEmptySeat(ReadFile("2020/Day5/main_input.txt")))
 
 if __name__ == "__main__":
     Main()
