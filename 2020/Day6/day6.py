@@ -4,7 +4,7 @@ def ReadFile(FileName):
     with open(FileName, "r") as SurveyData:
         for line in SurveyData:
             if line == "\n":
-                count += CheckNoOfYes(GroupAnswers)
+                count += CheckAllYes(GroupAnswers)
                 GroupAnswers.clear()
             else:
                 GroupAnswers.append(line.rstrip())
@@ -17,6 +17,12 @@ def CheckNoOfYes(GroupAnswers):
         for Char in Survey:
             if not Char in LettersUsed:
                 LettersUsed.append(Char)
+    return len(LettersUsed)
+
+def CheckAllYes(GroupAnswers):
+    LettersUsed = GroupAnswers[0]
+    for Survey in GroupAnswers:
+        LettersUsed = set(LettersUsed).intersection(Survey)
     return len(LettersUsed)
 
 def Main():
