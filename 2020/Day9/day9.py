@@ -22,8 +22,23 @@ def CheckIfNotSum(pointer, currentNumber, NumberList, PreambleLength):
                 return False
     return True
 
+def FindContiguousSum(ErrorNumber, NumberList):
+    pointer = 0
+    while NumberList[pointer] < ErrorNumber:
+        sumlist = [NumberList[pointer]]
+        i = 1
+        while sum(sumlist) <= ErrorNumber:
+            if sum(sumlist) == ErrorNumber:
+                return min(sumlist)+max(sumlist)
+            else:
+                sumlist.append(NumberList[pointer+i])
+                i += 1
+        pointer += 1
+
 def Main():
-    print(CalculateMissingLink(ReadFile("2020/Day9/main_input.txt"), 25))
+    InputFile = ReadFile("2020/Day9/main_input.txt")
+    MissingNo = CalculateMissingLink(InputFile, 25)
+    print(FindContiguousSum(MissingNo, InputFile))
 
 if __name__ == "__main__":
     Main()
