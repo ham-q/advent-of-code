@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from functools import reduce
 from math import lcm
+from time import time
 
 @dataclass
 class node:
@@ -78,7 +78,6 @@ def total_steps_redux(move_rule, graph):
     cycles = []
     for node in start_nodes:
         cycles += [find_cycle(move_rule,graph,node)]
-    print(cycles)
     z_locations = []
     for i in range(len(start_nodes)):
         z = []
@@ -91,16 +90,24 @@ def total_steps_redux(move_rule, graph):
             current_node = graph[current_node][0] if selected_move == "L" else graph[current_node][1]
         assert current_node == cycle_info[0]
         z_locations += z
-    print(z_locations)
     return lcm(*tuple(z_locations))
 
 
 def main(filename):
+    start = time()
     (move_rule, graph) = parse_graph(filename)
-    # (part_a_steps, final) = steps_with_rule(move_rule, graph,"AAA")
-    # print(part_a_steps)
+    end = time()
+    print("Parse took: ", (end-start)*1000, "ms")
+    start = time()
+    (part_a_steps, final) = steps_with_rule(move_rule, graph,"AAA")
+    end = time()
+    print(part_a_steps)
+    print("Part A took: ", (end-start)*1000, "ms")
+    start = time()
     part_b_steps = total_steps_redux(move_rule, graph)
+    end = time()
     print(part_b_steps)
+    print("Part B took: ", (end-start)*1000, "ms")
 
 if __name__ == '__main__':
     main("2023/Day08/main_input.txt")
