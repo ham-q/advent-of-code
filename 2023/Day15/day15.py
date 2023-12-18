@@ -1,11 +1,49 @@
 def parse(filename):
-    pass
+    with open(filename, "r") as file:
+        for line in file:
+            return line.strip().split(",")
+
+def hash(str):
+    result = 0
+    for char in str:
+        result += ord(char)
+        result = result * 17
+        result = result % 256
+    return result
 
 def part_a(parsed_data):
-    pass
+    result = 0
+    for string in parsed_data:
+        result += hash(string)
+    return result
 
 def part_b(parsed_data):
-    pass
+    boxes = {}
+    for i in range(256):
+        boxes[i] = {}
+    
+    for string in parsed_data:
+        if string[-1] == "-":
+            label = string[:-1]
+            box = hash(label)
+            if label in boxes[box]:
+                boxes[box].pop(label)
+        else:
+            (label, focal) = string.split("=")
+            box = hash(label)
+            boxes[box][label] = focal
+
+    result = 0
+    box_num = 1
+    for box in boxes.values():
+        slot_num = 1
+        for lens in box.values():
+            result += box_num * slot_num * int(lens)
+            slot_num += 1
+        box_num += 1
+    
+    return result
+
 
 def main(filename):
     parsed_data = parse(filename)
@@ -15,4 +53,4 @@ def main(filename):
     print(b_sol)
 
 if __name__ == '__main__':
-    main('2023/DayXX/test_input.txt')
+    main('2023/Day15/main_input.txt')
